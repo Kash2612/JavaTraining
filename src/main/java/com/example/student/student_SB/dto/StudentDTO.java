@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 
 @Data
 @AllArgsConstructor
@@ -15,5 +17,5 @@ public class StudentDTO {
     private String name;
     @Email(message = "enter valid email")
     private String email;
-    private String course;
+    private Set<CourseDTO> courses;
 }
