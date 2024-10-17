@@ -4,36 +4,37 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "student")
+@Table(name = "students")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class StudentEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
     private String email;
-    private String course; // This field will be removed since we're introducing relationships.
+    private String course;
 
-    // One-to-One relationship
-    @OneToOne(mappedBy = "student", cascade = CascadeType.ALL)
-    private Address address;  // Hypothetical Address entity
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_id", referencedColumnName = "id")
+    private AddressEntity address;
 
-    // One-to-Many relationship (a student can enroll in multiple courses)
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
-    private Set<CourseEntity> courses;
+    private Set<CourseEntity> courses = new HashSet<>();
 
-    // Many-to-Many relationship (students can have multiple projects and vice versa)
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
-            name = "student_project",
+            name = "student_projects",
             joinColumns = @JoinColumn(name = "student_id"),
             inverseJoinColumns = @JoinColumn(name = "project_id")
     )
-    private Set<ProjectEntity> projects;
+    private Set<ProjectEntity> projects = new HashSet<>();
 }

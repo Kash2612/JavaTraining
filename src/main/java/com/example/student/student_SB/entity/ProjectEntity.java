@@ -5,7 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
+@Table(name = "projects")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,8 +20,8 @@ public class ProjectEntity {
     private Long id;
 
     private String projectName;
+    private String projectDescription;
 
-    @ManyToOne
-    @JoinColumn(name = "student_id")
-    private StudentEntity student;
+    @ManyToMany(mappedBy = "projects")
+    private Set<StudentEntity> students = new HashSet<>();
 }
