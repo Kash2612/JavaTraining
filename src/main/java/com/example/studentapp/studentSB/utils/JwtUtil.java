@@ -11,8 +11,8 @@ import java.util.Date;
 
 @Component
 public class JwtUtil {
-    private String secretKey = "your_secret_key"; // Change to a secure key
-    private long validity = 3600000; // 1 hour
+    private String secretKey = "your_secret_key";
+    private long validity = 3600000;
 
     public String generateToken(String username) {
         JwtBuilder builder = Jwts.builder()

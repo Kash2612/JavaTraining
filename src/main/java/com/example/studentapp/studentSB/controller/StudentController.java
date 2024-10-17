@@ -2,6 +2,7 @@ package com.example.studentapp.studentSB.controller;
 
 import com.example.studentapp.studentSB.dto.StudentDTO;
 import com.example.studentapp.studentSB.entity.StudentEntity;
+import com.example.studentapp.studentSB.exception.StudentNotFoundException;
 import com.example.studentapp.studentSB.service.StudentService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/students")
@@ -23,12 +25,14 @@ public class StudentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<StudentEntity> getStudentById(@PathVariable Long id) {
-        StudentEntity student = studentService.getStudentById(id);
-        if (student == null) {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<StudentEntity> getStudentById(@PathVariable Long id) throws StudentNotFoundException {
+        Optional<StudentEntity> student = studentService.getStudentById(id);
+        if (student.isPresent()) {
+            return ResponseEntity.ok(student.get());
         }
-        return ResponseEntity.ok(student);
+        else{
+            throw new StudentNotFoundException("student not found with id "+id);
+        }
     }
 
     @PostMapping

@@ -16,5 +16,5 @@ public class UserEntity {
     private Long id;
 
     private String username;
-    private String password; // Ensure this is stored securely (hashed)
+    private String password;
 }

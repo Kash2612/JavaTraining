@@ -2,6 +2,7 @@ package com.example.studentapp.studentSB.service;
 
 import com.example.studentapp.studentSB.dto.StudentDTO;
 import com.example.studentapp.studentSB.entity.StudentEntity;
+import com.example.studentapp.studentSB.exception.StudentNotFoundException;
 import com.example.studentapp.studentSB.repository.StudentRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class StudentService {
@@ -25,8 +24,14 @@ public class StudentService {
         return studentRepository.findAll();
     }
 
-    public StudentEntity getStudentById(Long id) {
-        return studentRepository.findById(id).orElse(null);
+    public Optional<StudentEntity> getStudentById(Long id) throws StudentNotFoundException {
+        Optional<StudentEntity> student= studentRepository.findById(id);
+        if(student.isPresent()){
+            return student;
+        }
+        else{
+            throw new StudentNotFoundException("student nto found with id: "+id);
+        }
     }
 
 //    public StudentEntity createStudent(StudentDTO studentDTO) {
@@ -62,7 +67,7 @@ public class StudentService {
         if (optionalStudent.isPresent()) {
             StudentEntity student = optionalStudent.get();
             // Map fields from StudentDTO to StudentEntity
-            modelMapper.map(studentDTO, student); // Updates the student entity in place
+            modelMapper.map(studentDTO, student);
             return studentRepository.save(student);
         }
         return null;
