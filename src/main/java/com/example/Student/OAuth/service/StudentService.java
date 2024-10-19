@@ -7,6 +7,9 @@ import com.example.Student.OAuth.exception.StudentNotFoundException;
 import com.example.Student.OAuth.repository.StudentRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +23,15 @@ public class StudentService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    public String getAuthenticatedUserEmail() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication.getPrincipal() instanceof OAuth2User) {
+            OAuth2User oauthUser = (OAuth2User) authentication.getPrincipal();
+            return oauthUser.getAttribute("email"); // Fetches user's email from the OAuth provider
+        }
+        return null;
+    }
 
     public List<StudentEntity> getAllStudents() {
 

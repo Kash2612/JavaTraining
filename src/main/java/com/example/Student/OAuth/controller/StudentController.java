@@ -21,10 +21,16 @@ public class StudentController {
     private StudentService studentService;
 
     @GetMapping
-    public List<StudentEntity> getAllStudents() {
+    public String getAllStudents() {
 
-        return studentService.getAllStudents();
+        return "authenticateddddd";
     }
+
+//    @GetMapping
+//    public List<StudentEntity> getAllStudents() {
+//
+//        return studentService.getAllStudents();
+//    }
 
     @GetMapping("/{id}")
     public ResponseEntity<StudentEntity> getStudentById(@PathVariable Long id) throws StudentNotFoundException {
